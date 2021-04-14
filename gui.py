@@ -1,17 +1,18 @@
 from tkinter import *
 import os
+import util
 
 class resolute_gui:
     def __init__(self):
         # make "program_files" folder if it doesn't exist
-        if not os.path.exists("program_files"):
-            os.makedirs("program_files")
-        try:
-            defau = open("program_files/defaults.txt", 'r')
-            defaults = defau.read().split('\n')
-            defau.close()
-        except:
-            defaults = ['1', "", "", "", "1", "1"]
+        # if not os.path.exists("program_files"):
+        #     os.makedirs("program_files")
+        # try:
+        #     defau = open("program_files/defaults.txt", 'r')
+        #     defaults = defau.read().split('\n')
+        #     defau.close()
+        # except:
+        #     defaults = ['1', "", "", "", "1", "1"]
 
         # master tkinter window
         self.master = Tk()
@@ -21,10 +22,12 @@ class resolute_gui:
         self.background_color = "#CFF8FF"
 
         # set icon for master window
-        # try:
-        #     master.iconbitmap('filename.ico')
-        # except:
-        #     print("Couldn't load icon.")
+        ico_path = util.resource_path("img/favicon.ico")
+        try:
+            self.master.iconbitmap(ico_path)
+        except:
+            print("Couldn't load icon.")
+
         self.master.configure(background=self.background_color)
 
         def donothing():
