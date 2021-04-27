@@ -45,7 +45,7 @@ class resolute_gui:
 
         helpmenu = Menu(menubar, tearoff=0)
         helpmenu.add_command(label="Help Index", command=donothing)
-        helpmenu.add_command(label="About...", command=donothing)
+        helpmenu.add_command(label="About...", command=self.about_window)
         menubar.add_cascade(label="Help", menu=helpmenu)
 
         self.master.config(menu=menubar)
@@ -53,3 +53,19 @@ class resolute_gui:
 
         # Tkinter graphics loop:
         mainloop()
+
+    def about_window(self):
+        # Toplevel object which will
+        # be treated as a new window
+        newWindow = Toplevel(self.master)
+
+        # sets the title of the
+        # Toplevel widget
+        newWindow.title("About")
+
+        # sets the geometry of toplevel
+        newWindow.geometry("200x200")
+
+        # A Label widget to show in toplevel
+        Label(newWindow, anchor = NE, wraplength = 200, justify = LEFT,
+              text ="Resolute was created in 2021 by Matthew Youngbar, Gwyneth Yuen, and Connor Lenahan.\n This program was created for Professor Bram Van Heuveln as a part of Computability and Logic at RPI.").pack()
