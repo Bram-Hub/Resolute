@@ -10,6 +10,7 @@ v represents 'or'
 class sentence:
     def __init__(self):
         self.statements = []
+        self.resolution = []
         
     def printStatements(self):
         for i in self.statements:
@@ -48,9 +49,50 @@ class sentence:
             
         self.statements.append(terms)
 
-    def solve(self):
-        return None
+    def createResolutionStart(self):
+        for j in range(len(self.statements)):
+            for i in self.statements[j]:
+                count = 0
+                current = []
+                isor = False
+                s = i.getString()
+                while count < len(s):
+                    if s[count] == "(":
+                        #print("yes")
+                        count += 1
+                        statement = ""
+                        while s[count] != ")" and count < len(s):
+                            statement += s[count]
+                            count += 1
+                        
+                        if "^" in statement:
+                            y = statement.split("^")
+                            for r in y:
+                                current.append(r)
+                        
+                        elif "v" in statement:
+                            x = statement.split("v")
+                            current.append(x)
+                            
+                    if s[count] == "v":
+                        isor = True
+                    
+                    count += 1
+                
+                if isor:
+                    current
         
+        print(current)
+        
+        
+    def solve(self):
+        count = [0]*len(self.statements)
+        while True:
+            for i in range(len(count)):
+                if count[i] >= len(self.statements[i]):
+                    break
+        
+            
         
      
 class term:
@@ -96,11 +138,9 @@ class term:
         while count < len(self.string):
             # these characters don't really matter
             if self.string[count] == "~":
-                #print()
-                #print(self.string)
                 self.string = self.string[0:count] + self.string[count+1:]
                 alreadyNegated = True
-                #print(self.string)
+                
             elif self.string[count] == "(" or self.string[count] == ")" or self.string[count] == " ":
                 count += 1
                 continue
@@ -126,13 +166,14 @@ class term:
     
     
     
-t = term("(Q <-> R)")
+#t = term("(Q <-> R)")
 #print(t.negate())
 temp = sentence()
-temp.addStatement("P ^ Q")  
-temp.addStatement("~(Q <-> R)")  
-temp.addStatement("~(P v R)")  
+#temp.addStatement("P ^ Q")  
+temp.addStatement("~(Q <-> R)")
 temp.printStatements()
+#temp.addStatement("~(P v R)")  
+temp.createResolutionStart()
 
 
 
