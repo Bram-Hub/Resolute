@@ -50,7 +50,6 @@ class sentence:
         self.statements.append(terms)
 
     def createResolutionStart(self):
-        #print(self.statements[0][0].getString())
         for j in range(len(self.statements)):
             for i in self.statements[j]:
                 count = 0
@@ -59,7 +58,6 @@ class sentence:
                 s = i.getString()
                 while count < len(s):
                     if s[count] == "(":
-                        #print("yes")
                         count += 1
                         statement = ""
                         while s[count] != ")" and count < len(s):
@@ -80,10 +78,12 @@ class sentence:
                     
                     count += 1
                     
+                if isor:
+                    self.resolution.append(current)
+                    continue
+                    
                 for i in current:
                     self.resolution.append(i)
-                #if isor:
-                    #current
                     
                 
         
