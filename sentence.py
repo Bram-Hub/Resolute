@@ -50,6 +50,7 @@ class sentence:
         self.statements.append(terms)
 
     def createResolutionStart(self):
+        #print(self.statements[0][0].getString())
         for j in range(len(self.statements)):
             for i in self.statements[j]:
                 count = 0
@@ -78,11 +79,17 @@ class sentence:
                         isor = True
                     
                     count += 1
+                    
+                for i in current:
+                    self.resolution.append(i)
+                #if isor:
+                    #current
+                    
                 
-                if isor:
-                    current
         
-        print(current)
+                
+            
+        print(self.resolution)
         
         
     def solve(self):
@@ -165,14 +172,11 @@ class term:
     
     
     
-    
-#t = term("(Q <-> R)")
-#print(t.negate())
+
 temp = sentence()
-#temp.addStatement("P ^ Q")  
+temp.addStatement("~(P <-> Q)")  
 temp.addStatement("~(Q <-> R)")
-temp.printStatements()
-#temp.addStatement("~(P v R)")  
+temp.addStatement("~(P <-> R)")  
 temp.createResolutionStart()
 
 
