@@ -1,6 +1,7 @@
 from tkinter import *
 import os
 import util
+from sentence import *
 
 class resolute_gui:
     def __init__(self):
@@ -17,6 +18,8 @@ class resolute_gui:
         # master tkinter window
         self.master = Tk()
         self.master.title("Resolute")
+        self.sentence = Sentence()
+
         # window = Toplevel(self.master)
         # window.geometry("500x500")
         # variable for the color:
@@ -51,6 +54,12 @@ class resolute_gui:
 
         self.master.config(menu=menubar)
 
+        self.canvas_height = 400
+        self.canvas_width = 400
+
+        self.canvas = Canvas(self.master, bg="white", height=self.canvas_height, width=self.canvas_width)
+        self.canvas.grid(row = 0, column = 0, columnspan=5)
+
         self.input_boxes = []
         self.num_input_boxes = 0
         self.input_vars = []
@@ -62,7 +71,7 @@ class resolute_gui:
         var = StringVar()
         self.last_input_entry = Entry(self.master, textvariable = var, width=35)
         self.input_vars.append(var)
-        self.last_input_entry.grid(row = 4+self.num_input_boxes, column = 1)
+        self.last_input_entry.grid(row = 4+self.num_input_boxes, column = 1, columnspan = 3)
         self.input_boxes.append(self.last_input_entry)
 
         self.num_input_boxes += 1
@@ -72,13 +81,17 @@ class resolute_gui:
         var = StringVar()
         self.therefore_entry = Entry(self.master, textvariable = var, width=35)
         self.input_vars.append(var)
-        self.therefore_entry.grid(row = 4+self.num_input_boxes, column = 1)
+        self.therefore_entry.grid(row = 4+self.num_input_boxes, column = 1, columnspan = 3)
         self.input_boxes.append(self.therefore_entry)
 
         self.add_button = Button(self.master, text = "Add Sentence", command = self.make_input_box)
         self.add_button.grid(row = 3, column = 0)
         self.remove_button = Button(self.master, text = "Remove Sentence", command = self.remove_input_box)
         self.remove_button.grid(row = 3, column = 1, sticky = "W")
+
+
+        self.solve_button = Button(self.master, text = "Solve", command = self.solve)
+        self.solve_button.grid(row = 3, column = 2, stick="W")
         # self.make_input_box()
         # self.make_input_box()
         # Tkinter graphics loop:
@@ -108,7 +121,7 @@ class resolute_gui:
         var = StringVar()
         i = Entry(self.master, textvariable = var, width=35)
         self.input_vars.append(var)
-        i.grid(row = 3+self.num_input_boxes, column = 1)
+        i.grid(row = 3+self.num_input_boxes, column = 1, columnspan = 3)
         self.input_boxes.append(i)
         self.therefore_label.grid(row = 4+self.num_input_boxes, column = 0)
         self.therefore_entry.grid(row = 4+self.num_input_boxes, column = 1)
@@ -121,3 +134,37 @@ class resolute_gui:
             last_input_entry.destroy()
             last_input_label.destroy()
             self.num_input_boxes -= 1
+
+    def solve(self):
+        print("Solving...")
+        for v in self.input_vars:
+            self.sentence.addStatement(v.get())
+            print(v.get())
+        self.sentence.createResolutionStart()
+        self.sentence.printResolution()
+        solution = self.sentence.solve()
+        # print(solution)
+        self.draw_graph(solution)
+
+    def draw_graph(self, solution):
+        locations = dict()
+        level_counts = dict()
+        for l in solution.values():
+            if l[0] not in level_counts:
+                level_counts[l[0]] = 1
+            else:
+                level_counts[l[0]] += 1
+        y_spacing = (self.canvas_height )/(len(level_counts)+1)
+        for level in level_counts.keys():
+            x_spacing = (self.canvas_width)/(level_counts[level]+1)
+            count = 0
+            # print(count)
+            for s in solution.keys():
+                count += 1
+                if (solution[s][0] == level):
+                    node = str(s).replace("\',)", "}").replace("(", "{").replace(")", "}").replace("'", "")
+                    loc = x_spacing * count, y_spacing * (level+1)
+                    self.canvas.create_text(loc[0], loc[1], text = node)
+                    locations[s] = loc
+        print(level_counts)
+        return
