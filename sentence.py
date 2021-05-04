@@ -14,7 +14,7 @@ class Sentence:
     def __init__(self):
         self.statements = []    # stores the list of statements
         self.resolution = []    # stores the final resolution "pairs"
-    
+
     '''
     Print the statements.
     '''
@@ -39,11 +39,11 @@ class Sentence:
         para = True     # boolean for if there are parentheses
 
         s = s.strip()
-        
+
         if "(" not in s:
             terms.append(Term(s))
             para = False
-        
+
         while counter < len(s) and para:
             current = s[counter]
             if current == "(":
@@ -57,14 +57,14 @@ class Sentence:
                 if current.isalpha() or current == "~":
                     terms.append(Term(current))
                 counter += 1
-                
+
         counter = 0
         while counter < len(terms):
             if str(terms[counter]) == "~":
                 terms.pop(counter)
                 terms[counter].negate()
             counter += 1
-            
+
         for t in terms:
             if str(t) == "" or str(t) == "\n":
                 terms.remove(t)
@@ -90,17 +90,17 @@ class Sentence:
                         while s[count] != ")" and count < len(s):
                             statement += s[count]
                             count += 1
-                        
+
                         if "^" in statement:
                             for r in statement.split("^"):
                                 current.append(r.strip())
-                        
+
                         elif "v" in statement:
                             L = []
                             for r in statement.split("v"):
                                 L.append(r.strip())
                             current.append(L)
-                            
+
                     elif s[count] == "v":
                         isor = True
                         for r in s.split("v"):
@@ -112,20 +112,20 @@ class Sentence:
                     #     for r in s.split("^"):
                     #         L.append(r.strip())
                     #     current.append(L)
-                    
+
                     count += 1
-                    
+
                 if isor:
                     self.resolution.append(current)
                     continue
-                    
+
                 for c in current:
                     self.resolution.append(c)
 
                 if len(str(i)) == 1:
                     self.resolution.append([str(i)])
-        
-    def solve(self, res):
+
+    def loop(self, res):
         graph = dict()
         L = []
         for x in res:
@@ -205,12 +205,12 @@ class Sentence:
                 break
         return graph
 
-    def loop(self):
+    def solve(self):
         L = list(itertools.permutations(self.resolution, len(self.resolution)))
         graphs = []
         for combo in L:
             # print(combo)
-            this_graph = self.solve(combo)
+            this_graph = self.loop(combo)
             # print(this_graph)
             if tuple() in this_graph.keys():
                 graphs.append(this_graph)
@@ -218,6 +218,7 @@ class Sentence:
         #     print(g)
         if len(graphs) > 0:
             print(graphs[0])
+            return graphs[0]
 
 class Term:
     def __init__(self,s):
@@ -229,14 +230,14 @@ class Term:
 
     def __str__(self):
         return self.string
-    
+
     def convertIff(self):
         # strip parentheses if outside whole string
         if self.string[0] == "(":
             self.string = self.string[1::].strip()
         if self.string[len(self.string) - 1] == ")":
             self.string = self.string[0:len(self.string)-1].strip()
-        
+
         # find the index of "<"
         index = self.string.index('<') - 1
         # counter = 0
@@ -244,13 +245,13 @@ class Term:
         #    if self.string[counter] == "<":
         #        break
         #    counter += 1
-        
+
         first_term = self.string[0:index].strip()
         second_term = self.string[index+3::].strip()
         newString = "(~" + first_term + " ^ ~" + second_term + ") v (" + first_term + " ^ " + second_term + ")"
         self.string = newString
         return newString
-    
+
     def convertImplies(self):
         # strip parentheses if outside whole string
         if self.string[0] == "(":
@@ -264,7 +265,7 @@ class Term:
         newString = "~" + first_term + "v" + second_term
         self.string = newString
         return newString
-    
+
     def negate(self):
         count = 0
         alreadyNegated = False
@@ -276,7 +277,7 @@ class Term:
             if self.string[count] == "~":
                 self.string = self.string[0:count] + self.string[count+1:]
                 alreadyNegated = True
-                
+
             elif self.string[count] == "(" or self.string[count] == ")" or self.string[count] == " ":
                 count += 1
                 continue
@@ -284,11 +285,11 @@ class Term:
                 if self.string[count] == "^":
                     self.string = self.string[0:count] + "v" + self.string[count+1::]
                     count +=1
-                    
+
                 elif self.string[count] == "v":
                     self.string = self.string[0:count] + "^" + self.string[count+1::]
                     count += 1
-                    
+
                 else:
                     if alreadyNegated:
                         alreadyNegated = False
@@ -319,4 +320,4 @@ if __name__ == "__main__":
     # temp2.printStatements()
     temp2.createResolutionStart()
     temp2.printResolution()
-    temp2.loop()
+    temp2.solve()
