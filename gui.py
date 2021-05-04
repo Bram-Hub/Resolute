@@ -2,6 +2,7 @@ from tkinter import *
 import os
 import util
 from sentence import *
+import random
 
 class resolute_gui:
     def __init__(self):
@@ -139,7 +140,7 @@ class resolute_gui:
         print("Solving...")
         for v in self.input_vars:
             self.sentence.addStatement(v.get())
-            print(v.get())
+            # print(v.get())
         self.sentence.createResolutionStart()
         self.sentence.printResolution()
         solution = self.sentence.solve()
@@ -147,6 +148,7 @@ class resolute_gui:
         self.draw_graph(solution)
 
     def draw_graph(self, solution):
+        self.canvas.delete("all")
         locations = dict()
         level_counts = dict()
         for l in solution.values():
@@ -158,13 +160,26 @@ class resolute_gui:
         for level in level_counts.keys():
             x_spacing = (self.canvas_width)/(level_counts[level]+1)
             count = 0
+            # print(level)
             # print(count)
             for s in solution.keys():
-                count += 1
+                # print(solution[s][0])
                 if (solution[s][0] == level):
+                    count += 1
                     node = str(s).replace("\',)", "}").replace("(", "{").replace(")", "}").replace("'", "")
+                    # print(node)
                     loc = x_spacing * count, y_spacing * (level+1)
+                    # print(loc)
                     self.canvas.create_text(loc[0], loc[1], text = node)
                     locations[s] = loc
+        for s in solution.keys():
+            if (solution[s][1] != None and solution[s][2] != None):
+                de=("%02x"%random.randint(0,255))
+                re=("%02x"%random.randint(0,255))
+                we=("%02x"%random.randint(0,255))
+                ge="#"
+                color=ge+de+re+we
+                self.canvas.create_line(locations[solution[s][1]][0], locations[solution[s][1]][1]+5, locations[s][0], locations[s][1]-5, fill = color)
+                self.canvas.create_line(locations[solution[s][2]][0], locations[solution[s][2]][1]+5, locations[s][0], locations[s][1]-5, fill = color)
         print(level_counts)
         return
