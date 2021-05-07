@@ -213,6 +213,9 @@ class Sentence:
             this_graph = self.loop(combo)
             # print(this_graph)
             if tuple() in this_graph.keys():
+                # graphs.append(this_graph)
+                return this_graph
+            else:
                 graphs.append(this_graph)
         # for g in graphs:
         #     print(g)

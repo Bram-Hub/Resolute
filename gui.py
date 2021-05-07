@@ -138,6 +138,7 @@ class resolute_gui:
 
     def solve(self):
         print("Solving...")
+        self.sentence = Sentence()
         for v in self.input_vars:
             self.sentence.addStatement(v.get())
             # print(v.get())
