@@ -220,8 +220,8 @@ class Sentence:
         # for g in graphs:
         #     print(g)
         if len(graphs) > 0:
-            print(graphs[0])
             return graphs[0]
+
 
 class Term:
     def __init__(self,s):
@@ -242,12 +242,11 @@ class Term:
             self.string = self.string[0:len(self.string)-1].strip()
 
         # find the index of "<"
-        index = self.string.index('<') - 1
-        # counter = 0
-        # while counter < len(self.string):
-        #    if self.string[counter] == "<":
-        #        break
-        #    counter += 1
+        index = 0
+        while index < len(self.string):
+           if self.string[index] == "<":
+               break
+           index += 1
 
         first_term = self.string[0:index].strip()
         second_term = self.string[index+3::].strip()
@@ -262,7 +261,12 @@ class Term:
         if self.string[len(self.string) - 1] == ")":
             self.string = self.string[0:len(self.string)-1].strip()
 
-        index = self.string.index('-')-1
+        index = 0
+        while index < len(self.string):
+           if self.string[index] == "-":
+               break
+           index += 1
+
         first_term = self.string[0:index].strip()
         second_term = self.string[index+3::].strip()
         newString = "~" + first_term + "v" + second_term
@@ -305,14 +309,14 @@ class Term:
 
 if __name__ == "__main__":
     # print("STATEMENTS 1: ~(P <-> Q), ~(Q <-> R), ~(P <-> R)")
-    # temp = Sentence()
-    # temp.addStatement("~(P <-> Q)")
-    # temp.addStatement("~(Q <-> R)")
-    # temp.addStatement("~(P <-> R)")
-    # # temp.printStatements()
-    # temp.createResolutionStart()
-    # temp.printResolution()
-    # temp.loop()
+    temp = Sentence()
+    temp.addStatement("~(P <-> Q)")
+    temp.addStatement("~(Q <-> R)")
+    temp.addStatement("~(P <-> R)")
+    # temp.printStatements()
+    temp.createResolutionStart()
+    temp.printResolution()
+    temp.solve()
 
     # print("STATEMENTS 2: F v G, H ^ (I -> F), H -> ~F, ~(G ^ ~I)")
     temp2 = Sentence()
