@@ -129,28 +129,20 @@ class Sentence:
         graph = dict()
         L = []
         visited = set()
-        # used = dict()
-        # def sorter(v):
-        #     return used[v]
 
         for x in res:
             L.append(tuple(x))
-            # used[tuple(x)] = False
             graph[tuple(x)] = [0, None, None]
+
         while L:
-            # print(L)
             breaker = False
-            # L.sort(key = sorter)
             for i in range(len(L)):
-                # if breaker:
-                #     break
                 left = L[i]
                 for j in range(i+1, len(L)):
                     right = L[j]
                     new_level = max(graph[L[i]][0], graph[L[j]][0]) + 1
                     # print(visited)
                     if (L[i], L[j]) in visited:
-                        # print("here")
                         continue
                     if L[i][0].strip("~") == L[j][0].strip("~") and ((L[i][0][0] == "~" and L[j][0][0] != "~") or (L[i][0][0] != "~" and L[j][0][0] == "~")):
                         new = tuple()
