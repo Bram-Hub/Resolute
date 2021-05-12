@@ -128,17 +128,22 @@ class Sentence:
     def loop(self, res):
         graph = dict()
         L = []
+        visited = set()
+
         for x in res:
             L.append(tuple(x))
             graph[tuple(x)] = [0, None, None]
+
         while L:
-            # print(L)
             breaker = False
             for i in range(len(L)):
-                if breaker:
-                    break
+                left = L[i]
                 for j in range(i+1, len(L)):
+                    right = L[j]
                     new_level = max(graph[L[i]][0], graph[L[j]][0]) + 1
+                    # print(visited)
+                    if (L[i], L[j]) in visited:
+                        continue
                     if L[i][0].strip("~") == L[j][0].strip("~") and ((L[i][0][0] == "~" and L[j][0][0] != "~") or (L[i][0][0] != "~" and L[j][0][0] == "~")):
                         new = tuple()
                         if len(L[i]) >= 2 and len(L[j]) >= 2:
@@ -149,14 +154,19 @@ class Sentence:
                             new = tuple([L[i][1]])
                         elif len(L[i]) < 2 and len(L[j]) >= 2:
                             new = tuple([L[j][1]])
-                        graph[new] = [new_level, L[i], L[j]]
-                        L.remove(L[j])
+                        if new not in L:
+                            graph[new] = [new_level, L[i], L[j]]
+                        L.remove(L[j]) # find a way to not remove from list without
                         L.remove(L[i])
-                        if new != tuple():
+                        L.append(right)
+                        L.append(left)
+                        if new != tuple() and new not in L:
                             L.append(new)
+                        if (new == tuple()):
+                            return graph
+                        visited.add((L[i], L[j]))
                         breaker = True
                         break
-                        # found = True
                     elif len(L[j]) >= 2 and L[i][0].strip("~") == L[j][1].strip("~") and ((L[i][0][0] == "~" and L[j][1][0] != "~") or (L[i][0][0] != "~" and L[j][1][0] == "~")):
                         new = tuple()
                         if len(L[i]) >= 2 and len(L[j]) >= 2:
@@ -167,11 +177,17 @@ class Sentence:
                             new = tuple([L[i][1]])
                         elif len(L[i]) < 2 and len(L[j]) >= 2:
                             new = tuple([L[j][0]])
-                        graph[new] = [new_level, L[i], L[j]]
+                        if new not in L:
+                            graph[new] = [new_level, L[i], L[j]]
                         L.remove(L[j])
                         L.remove(L[i])
-                        if new != tuple():
+                        L.append(right)
+                        L.append(left)
+                        if new != tuple() and new not in L:
                             L.append(new)
+                        if (new == tuple()):
+                            return graph
+                        visited.add((L[i], L[j]))
                         breaker = True
                         break
                     elif len(L[i]) >= 2 and L[i][0].strip("~") == L[j][0].strip("~") and ((L[i][1][0] == "~" and L[j][0][0] != "~") or (L[i][1][0] != "~" and L[j][0][0] == "~")):
@@ -184,21 +200,35 @@ class Sentence:
                             new = tuple([L[i][0]])
                         elif len(L[i]) < 2 and len(L[j]) >= 2:
                             new = tuple([L[j][1]])
-                        graph[new] = [new_level, L[i], L[j]]
+
+                        if new not in L:
+                            graph[new] = [new_level, L[i], L[j]]
+                        # they get removed and then added back so that they move to the end of the list, giving priority to nodes that have not yet been used, which generally results in a nicer looking graph.
                         L.remove(L[j])
                         L.remove(L[i])
-                        if new != tuple():
+                        L.append(right)
+                        L.append(left)
+
+                        if new != tuple() and new not in L:
                             L.append(new)
+                        if (new == tuple()):
+                            return graph
+                        visited.add((L[i], L[j]))
                         breaker = True
                         break
                     elif len(L[i]) >= 2 and len(L[j]) >= 2 and L[i][0].strip("~") == L[j][0].strip("~") and ((L[i][1][0] == "~" and L[j][1][0] != "~") or (L[i][1][0] != "~" and L[j][1][0] == "~")):
                         new = (L[i][1], L[j][1])
                         if L[i][1] == L[j][1]:
                             new = tuple([L[i][1]])
-                        graph[new] = [new_level, L[i], L[j]]
+                        if new not in L:
+                            graph[new] = [new_level, L[i], L[j]]
                         L.remove(L[j])
                         L.remove(L[i])
-                        L.append(new)
+                        L.append(right)
+                        L.append(left)
+                        if new not in L:
+                            L.append(new)
+                        visited.add((L[i], L[j]))
                         breaker = True
                         break
             if not breaker:
@@ -208,19 +238,43 @@ class Sentence:
     def solve(self):
         L = list(itertools.permutations(self.resolution, len(self.resolution)))
         graphs = []
+        min_graph = None
         for combo in L:
-            # print(combo)
             this_graph = self.loop(combo)
-            # print(this_graph)
-            if tuple() in this_graph.keys():
-                # graphs.append(this_graph)
-                return this_graph
+            if tuple() in this_graph.keys() and (min_graph == None or len(min_graph) > len(this_graph)):
+                min_graph = this_graph
             else:
                 graphs.append(this_graph)
-        # for g in graphs:
-        #     print(g)
-        if len(graphs) > 0:
+        if min_graph != None:
+            self.prune_graph(min_graph)
+            return min_graph
+        elif len(graphs) > 0:
             return graphs[0]
+
+    def prune_graph(self, graph):
+        queue = []
+        visited = set()
+        visited.add(tuple())
+        queue.append(tuple())
+        while queue:
+            v = queue.pop(0)
+            left = graph[v][1]
+            right = graph[v][2]
+            if left != None and left not in visited:
+                visited.add(left)
+                queue.append(left)
+            if right != None and right not in visited:
+                visited.add(right)
+                queue.append(right)
+        not_in = set()
+        for k in graph.keys():
+            if k not in visited:
+                not_in.add(k)
+        for n in not_in:
+            if graph[n][0] != 0:
+                graph.pop(n)
+
+
 
 
 class Term:

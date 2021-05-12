@@ -145,7 +145,7 @@ class resolute_gui:
         self.sentence.createResolutionStart()
         self.sentence.printResolution()
         solution = self.sentence.solve()
-        # print(solution)
+        print(solution)
         self.draw_graph(solution)
 
     def draw_graph(self, solution):
