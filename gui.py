@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import filedialog
 import os
 import util
 from sentence import *
@@ -41,9 +42,9 @@ class resolute_gui:
         # example menu bar:
         menubar = Menu(self.master)
         filemenu = Menu(menubar, tearoff=0)
-        filemenu.add_command(label="New", command=donothing)
-        filemenu.add_command(label="Open", command=donothing)
-        filemenu.add_command(label="Save", command=donothing)
+        # filemenu.add_command(label="New", command=lambda: resolute_gui())
+        filemenu.add_command(label="Open", command=self.open_file)
+        filemenu.add_command(label="Save", command=self.save_to_file)
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.master.quit)
         menubar.add_cascade(label="File", menu=filemenu)
@@ -184,3 +185,31 @@ class resolute_gui:
                 self.canvas.create_line(locations[solution[s][2]][0], locations[solution[s][2]][1]+5, locations[s][0], locations[s][1]-5, fill = color)
         print(level_counts)
         return
+
+    def save_to_file(self):
+        self.master.filename = filedialog.asksaveasfilename(initialdir = os.getcwd(), initialfile= "data.reso", title = "Select file to save to", filetypes = (("Resolute files", "*.reso"),("text files", "*.txt"),("all files", "*.*")))
+        if self.master.filename!='':
+            data_file = open(self.master.filename, 'w')
+            output_string = str(self.num_input_boxes) + '\n'
+            for var in self.input_vars:
+                output_string += var.get() + '\n'
+            data_file.write(output_string)
+            data_file.close()
+            self.master.update()
+
+    def open_file(self):
+        file_path = filedialog.askopenfilename(initialdir = os.getcwd(),  title = "Select file to open", filetypes=(("Resolute files", "*.reso"),("text files", "*.txt"),("all files", "*.*")))
+        if file_path!='':
+            data_file = open(file_path, 'r')
+            data = data_file.read().split('\n')
+            num_sentences = int(data[0])
+            if num_sentences > self.num_input_boxes:
+                for x in range(num_sentences - self.num_input_boxes):
+                    self.make_input_box()
+            elif num_sentences < self.num_input_boxes:
+                for x in range(self.num_input_boxes - num_sentences):
+                    self.make_input_box()
+            for v in range(len(self.input_vars)):
+                self.input_vars[v].set(data[v+1])
+            data_file.close()
+            self.master.update()
