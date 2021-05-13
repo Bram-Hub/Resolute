@@ -2,8 +2,16 @@
 GUI for Resolution Problem Solving
 
 ### Instructions
-Download ```resolute.exe```\
-Note: If exe doesn't work, download the respository and run in command line by navigating to the correct directory, and running ```python resolute.py```
+#####Windows:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download and run ```resolute.exe```\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: If exe doesn't run correctly, download the respository and run in command prompt by navigating to the correct directory, and running ```python resolute.py```
+
+#####Linux:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run the shell script in ```compile.sh```
+
+#####Mac:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run the executable
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 Use the "Add Sentence" button to add the required number of sentences, and "Remove Sentence" to remove a sentence.\
 Enter the sentences. The following symbols can be used:\
