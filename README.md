@@ -10,7 +10,7 @@ GUI for Resolution Problem Solving
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run the shell script in ```compile.sh```
 
 #### Mac:
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download the Mac app and run
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download the Mac app and run\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: If this doesn't work, run ```python resolute.py``` in the terminal
 
 Use the "Add Sentence" button to add the required number of sentences, and "Remove Sentence" to remove a sentence.\
