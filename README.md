@@ -25,5 +25,5 @@ When finished entering the sentences, press the ```Solve``` button, and your res
 
 The ```File``` menu has ```Save``` and ```Open``` options, where the current file can be saved as a ```.reso``` file and reopened.
 
-Example:
+Example:\
 ![Example](https://github.com/matthewyoungbar/Resolute/blob/main/img/Example.png?raw=true)
