@@ -2,6 +2,7 @@
 GUI for Resolution Problem Solving
 
 ### Instructions
+Windows and Mac executables can be downloaded from the Release section (v1.0.0).
 #### Windows:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run ```resolute.exe```\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: If the executable doesn't run correctly, run ```python resolute.py``` in command prompt
