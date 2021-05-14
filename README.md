@@ -7,11 +7,11 @@ GUI for Resolution Problem Solving
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: If the executable doesn't run correctly, run ```python resolute.py``` in command prompt
 
 #### Linux:
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run the shell script in ```compile.sh```
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Using Python 3, run ```python resolute.py``` in the terminal.
 
 #### Mac:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Download the Mac app and run\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: If this doesn't work, run ```python resolute.py``` in the terminal
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: If this doesn't work, run ```python resolute.py``` in the terminal (must be Python 3)
 
 Use the "Add Sentence" button to add the required number of sentences, and "Remove Sentence" to remove a sentence.\
 Enter the sentences. The following symbols can be used:\
